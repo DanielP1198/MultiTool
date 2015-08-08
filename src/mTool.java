@@ -150,7 +150,7 @@ public class mTool extends JFrame {
 		fc1.setApproveButtonText("Save");
 		fc.setCurrentDirectory(new java.io.File("."));
 		fc.setDialogTitle("File Explorer");
-		
+		fc1.setDialogTitle("File Explorer");
 
 		
 		
