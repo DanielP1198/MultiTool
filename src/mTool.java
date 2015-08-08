@@ -41,7 +41,7 @@ public class mTool extends JFrame {
 		panel.setLayout(new GridBagLayout());
 		GridBagConstraints gbc = new GridBagConstraints();
 		gbc.insets = new Insets(15,15,15,15);
-
+		gbc.fill = GridBagConstraints.HORIZONTAL;
 		JButton tCalc = new JButton("Calculator");
 		JButton tEditor = new JButton("Text Editor");
 		JButton tGame = new JButton("Game");
