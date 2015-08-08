@@ -275,6 +275,7 @@ public class mTool extends JFrame {
 					BufferedReader br;
 					try {
 						br = new BufferedReader(new FileReader(fc.getSelectedFile()));
+						tf.setText(null);
 						String line;
 						while((line = br.readLine()) != null){
 							tf.append(line + "\n");
