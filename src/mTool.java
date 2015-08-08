@@ -2,17 +2,27 @@ import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 public class mTool extends JFrame {
@@ -32,7 +42,7 @@ public class mTool extends JFrame {
 		mTool frame = new mTool();
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setSize(800,600);
-		
+
 		frame.setTitle("MultiTool");
 		frame.setResizable(false);
 		
@@ -40,7 +50,8 @@ public class mTool extends JFrame {
 		JPanel panel = new JPanel();
 		panel.setLayout(new GridBagLayout());
 		GridBagConstraints gbc = new GridBagConstraints();
-		gbc.insets = new Insets(15,15,15,15);
+
+		gbc.insets = new Insets(10,10,10,10);	
 		gbc.fill = GridBagConstraints.HORIZONTAL;
 		JButton tCalc = new JButton("Calculator");
 		JButton tEditor = new JButton("Text Editor");
@@ -103,14 +114,44 @@ public class mTool extends JFrame {
 		calcPanel.add(multiply,gbc);
 		gbc.gridx = 0;
 		gbc.gridy = 2;
-
+		
+		gbc.fill = GridBagConstraints.NONE;
 
 		
 		
 		panelCont.add(calcPanel, "Calculator");
 		panelCont.add(editPanel, "Editor");
 		panelCont.add(gamePanel, "Game");
+
 		cl.show(panelCont, "Calculator");
+
+		JTextArea tf = new JTextArea();
+		JScrollPane scroll = new JScrollPane(tf);
+		scroll.setPreferredSize(new Dimension(600,450));//600x450
+		editPanel.add( scroll, gbc);
+		gbc.gridy = gbc.NORTH;		
+		gbc.gridy = gbc.CENTER;
+		JButton open = new JButton("Open");
+		
+		JButton save = new JButton("Save");
+		gbc.weighty = 0;
+		gbc.gridwidth = GridBagConstraints.REMAINDER;
+		gbc.gridheight = 1;
+		gbc.gridheight = 0;
+		gbc.gridwidth = 0;
+		gbc.anchor = gbc.LAST_LINE_START;
+		editPanel.add(open, gbc);
+	 	gbc.gridx = 0;
+		gbc.gridy = 0;
+		gbc.anchor = gbc.LAST_LINE_END;
+		editPanel.add(save, gbc);
+		final JFileChooser fc = new JFileChooser();
+		final JFileChooser fc1 = new JFileChooser();
+		fc1.setApproveButtonText("Save");
+		fc.setCurrentDirectory(new java.io.File("."));
+		fc.setDialogTitle("File Explorer");
+		
+
 		
 		
 		//This is the panel events
@@ -177,6 +218,7 @@ public class mTool extends JFrame {
 					System.out.println(answ);
 					}
 				}
+
 			});
 			//Dividing
 			divide.addActionListener(new ActionListener() {
@@ -224,8 +266,54 @@ public class mTool extends JFrame {
 		
 		
 		
-		frame.setVisible(true);
 		
+	
+		// button for opening
+		open.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(fc.showOpenDialog(open) == JFileChooser.APPROVE_OPTION){
+					BufferedReader br;
+					try {
+						br = new BufferedReader(new FileReader(fc.getSelectedFile()));
+						String line;
+						while((line = br.readLine()) != null){
+							tf.append(line + "\n");
+						}
+						br.close();
+					} catch (FileNotFoundException e1) {
+						e1.printStackTrace();
+					} catch (IOException e1) {
+						e1.printStackTrace();
+					}
+				}
+				System.out.println("You chose: "+fc.getSelectedFile().getAbsolutePath());
+				
+			}
+		});
+		save.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(fc1.showOpenDialog(save) == JFileChooser.APPROVE_OPTION){
+					BufferedWriter bw;
+					try {
+						if(fc1.getSelectedFile().getName().contains(".txt")){
+							bw = new BufferedWriter(new FileWriter(fc1.getSelectedFile()));
+						} else {
+							bw = new BufferedWriter(new FileWriter(fc1.getSelectedFile()+".txt"));
+						}
+						bw.write(tf.getText());
+						bw.close();
+					} catch (FileNotFoundException e1) {
+						e1.printStackTrace();
+					} catch (IOException e1) {
+						e1.printStackTrace();
+					}
+				}
+				System.out.println("You chose: "+fc1.getSelectedFile().getAbsolutePath());
+				
+			}
+		});
+		frame.setVisible(true);
+
 	}
 	
 	
